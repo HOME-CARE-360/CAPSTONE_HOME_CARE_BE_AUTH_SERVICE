@@ -13,6 +13,7 @@ import { GoogleUserInfoError } from './auth.error'
 import { HashingService } from 'libs/common/src/services/hashing.service'
 import { SharedRoleRepository } from 'libs/common/src/repositories/shared-role.repo'
 import { ConfigService } from '@nestjs/config'
+import { SharedUserRepository } from 'libs/common/src/repositories/shared-user.repo'
 
 
 @Injectable()
@@ -20,6 +21,7 @@ export class GoogleService {
   private oauth2Client: OAuth2Client
   constructor(
     private readonly authRepository: AuthReponsitory,
+    private readonly shareUserRepository: SharedUserRepository,
     private readonly hashingService: HashingService,
     private readonly sharedRoleRepository: SharedRoleRepository,
     private readonly authService: AuthService,
@@ -88,7 +90,7 @@ export class GoogleService {
         const clientRoleId = await this.sharedRoleRepository.getCustomerRoleId()
         const randomPassword = uuidv4()
         const hashedPassword = await this.hashingService.hash(randomPassword)
-        user = await this.authRepository.createUserIncludeRole({
+        user = await this.shareUserRepository.createUserIncludeRole({
           email: data.email,
           name: data.name ?? '',
           password: hashedPassword,

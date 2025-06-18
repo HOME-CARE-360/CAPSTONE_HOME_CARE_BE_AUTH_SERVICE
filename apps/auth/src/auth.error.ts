@@ -25,11 +25,7 @@ export const RefreshTokenRevokedException = new RpcException(
         path: 'refreshToken',
     })
 );
-export const EmailAlreadyExistsException = new RpcException(
-    new UnprocessableEntityException([
-        { message: 'Error.EmailAlreadyExists', path: 'email' },
-    ])
-);
+
 
 export const ServiceProviderAlreadyExistsException = new RpcException(
     new UnprocessableEntityException([
@@ -43,11 +39,6 @@ export const InvalidPasswordException = new RpcException(
     ])
 );
 
-export const EmailNotFoundException = new RpcException(
-    new UnprocessableEntityException([
-        { message: 'Error.EmailNotFound', path: 'email' },
-    ])
-);
 
 export const RefreshTokenAlreadyUsedException = new RpcException(
     new UnauthorizedException('Error.RefreshTokenAlreadyUsed')

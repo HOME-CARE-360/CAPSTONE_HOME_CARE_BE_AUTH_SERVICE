@@ -15,67 +15,6 @@ import { CreateServiceProviderType } from "libs/common/src/models/shared-provide
 export class AuthReponsitory {
     constructor(private readonly prismaService: PrismaService) { }
 
-    async createUser(
-        user: Pick<UserType, 'email' | 'name' | 'password' | 'phone' | "roles">,
-    ): Promise<Omit<UserType, 'password' | 'totpSecret'>> {
-
-
-        const userRaw = await this.prismaService.user.create({
-            data: {
-                email: user.email,
-                name: user.name,
-                password: user.password,
-                phone: user.phone,
-                roles: {
-                    connect: user.roles.map(roleId => ({ id: roleId.id }))
-                }
-            },
-            omit: {
-                password: true,
-                totpSecret: true
-            },
-            include: {
-                roles: true,
-
-            }
-        })
-        await this.prismaService.customerProfile.create({
-            data: {
-                userId: userRaw.id
-            }
-        })
-        return userRaw
-    }
-
-    async createUserIncludeRole(
-        user: Pick<UserType, 'email' | 'name' | 'password' | 'phone' | 'avatar' | 'roles'>,
-    ): Promise<UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number } | null }> {
-        return await this.prismaService.user.create({
-            data: {
-                email: user.email,
-                name: user.name,
-                password: user.password,
-                phone: user.phone,
-                roles: {
-                    connect: user.roles.map(roleId => ({ id: roleId.id }))
-                },
-                avatar: user.avatar,
-            },
-            include: {
-                roles: true,
-                serviceProvider: {
-                    select: {
-                        id: true
-                    }
-                },
-                staff: {
-                    select: {
-                        providerId: true
-                    }
-                }
-            },
-        })
-    }
     async createVerificationCode(payload: Pick<VerificationCodeType, 'email' | 'type' | 'code' | 'expiresAt'>): Promise<VerificationCodeType> {
         await this.prismaService.verificationCode.deleteMany({
             where: {

@@ -18,8 +18,6 @@ import {
 
 
 import {
-    EmailAlreadyExistsException,
-    EmailNotFoundException,
     FailedToSendOTPException,
     InvalidOTPException,
     InvalidPasswordException,
@@ -50,6 +48,7 @@ import { AccessTokenPayloadCreate } from 'libs/common/src/types/jwt.type'
 import { VerificationStatusConst } from 'libs/common/src/constants/common.constants'
 import { generateOTP, isNotFoundPrismaError, isUniqueConstraintPrismaError } from 'libs/common/helpers'
 import { ConfigService } from '@nestjs/config'
+import { EmailAlreadyExistsException, EmailNotFoundException } from 'libs/common/src/errors/share-user.error'
 
 @Injectable()
 export class AuthService {
@@ -99,7 +98,7 @@ export class AuthService {
             const clientRole = await this.rolesService.getCustomerRoleId()
 
             const [user] = await Promise.all([
-                this.authRepository.createUser({
+                this.sharedUser.createUser({
                     email: body.email,
                     password: hashedPassword,
                     roles: [clientRole],
@@ -326,7 +325,7 @@ export class AuthService {
             const serviceProviderRole = await this.rolesService.getServiceProviderRoleId()
 
             const [user] = await Promise.all([
-                this.authRepository.createUser({
+                this.sharedUser.createUser({
                     email: body.email,
                     password: hashedPassword,
                     roles: [serviceProviderRole],

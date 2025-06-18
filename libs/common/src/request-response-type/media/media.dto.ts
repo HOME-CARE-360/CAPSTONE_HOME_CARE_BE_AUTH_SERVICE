@@ -1,8 +1,6 @@
 import { createZodDto } from 'nestjs-zod'
-import {
-    PresignedUploadFileBodySchema,
+import { PresignedUploadFileBodySchema } from './media.model';
 
-} from 'src/routes/media/media.model'
 
 export class PresignedUploadFileBodyDTO extends createZodDto(PresignedUploadFileBodySchema) { }
 
