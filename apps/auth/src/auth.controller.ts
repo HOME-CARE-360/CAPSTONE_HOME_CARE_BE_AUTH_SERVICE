@@ -62,6 +62,7 @@ export class AuthController {
   @MessagePattern({ cmd: 'logout' })
   @ZodSerializerDto(MessageResDTO)
   logout(@Payload() body: LogoutBodyDTO) {
+    console.log(body);
     return this.authService.logout(body.refreshToken)
   }
   //done
