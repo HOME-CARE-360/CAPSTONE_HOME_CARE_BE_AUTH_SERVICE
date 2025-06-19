@@ -74,3 +74,7 @@ export const InvalidTOTPAndCodeException = new RpcException(
         { message: 'Error.InvalidTOTPAndCode', path: 'code' },
     ])
 );
+export const UnauthorizedExceptionRpc = new RpcException(
+    new UnauthorizedException()
+);
+

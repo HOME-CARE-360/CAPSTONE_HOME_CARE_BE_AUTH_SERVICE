@@ -1,7 +1,6 @@
 import {
     HttpException,
     Injectable,
-    UnauthorizedException,
 
 } from '@nestjs/common'
 
@@ -25,6 +24,7 @@ import {
     OTPExpiredException,
     RefreshTokenRevokedException,
     ServiceProviderAlreadyExistsException,
+    UnauthorizedExceptionRpc,
 } from './auth.error'
 
 
@@ -49,6 +49,7 @@ import { VerificationStatusConst } from 'libs/common/src/constants/common.consta
 import { generateOTP, isNotFoundPrismaError, isUniqueConstraintPrismaError } from 'libs/common/helpers'
 import { ConfigService } from '@nestjs/config'
 import { EmailAlreadyExistsException, EmailNotFoundException } from 'libs/common/src/errors/share-user.error'
+import { RpcException } from '@nestjs/microservices'
 
 @Injectable()
 export class AuthService {
@@ -251,8 +252,8 @@ export class AuthService {
                 data: tokens,
             }
         } catch (error) {
-            if (error instanceof HttpException) throw error
-            throw new UnauthorizedException()
+            if (error instanceof HttpException) throw new RpcException(error)
+            throw UnauthorizedExceptionRpc
         }
     }
     async logout(refreshToken: string) {
@@ -267,9 +268,9 @@ export class AuthService {
             return { message: 'Logout successfully' }
         } catch (error) {
             if (isNotFoundPrismaError(error)) {
-                throw new UnauthorizedException("Refresh token has been revoked")
+                throw RefreshTokenRevokedException
             }
-            throw new UnauthorizedException()
+            throw UnauthorizedExceptionRpc
         }
     }
     async forgotPassword(body: ForgotPasswordBodyType) {
@@ -355,7 +356,7 @@ export class AuthService {
             if (isUniqueConstraintPrismaError(error)) {
                 throw EmailAlreadyExistsException
             }
-            throw error
+            throw new RpcException(error)
         }
     }
 }
