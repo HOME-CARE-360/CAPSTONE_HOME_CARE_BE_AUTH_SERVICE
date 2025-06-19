@@ -50,6 +50,7 @@ export class AuthController {
     ip: string, userAgent: string
   }
   ) {
+    console.log(ip, userAgent, refreshToken);
 
     return this.authService.refreshToken({
       refreshToken, ip, userAgent

@@ -395,7 +395,8 @@ model Transaction {
   deletedById Int?
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
-  booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  orderCode   String?       @unique @db.VarChar(255)
+  Booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model PaymentTransaction {
