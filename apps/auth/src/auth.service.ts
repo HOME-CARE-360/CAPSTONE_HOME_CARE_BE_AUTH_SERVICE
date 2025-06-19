@@ -267,6 +267,8 @@ export class AuthService {
             })
             return { message: 'Logout successfully' }
         } catch (error) {
+            console.log(error);
+
             if (isNotFoundPrismaError(error)) {
                 throw RefreshTokenRevokedException
             }
