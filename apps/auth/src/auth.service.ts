@@ -195,7 +195,9 @@ export class AuthService {
             deviceId: device.id,
             roles: user.roles,
             providerId: user.serviceProvider?.id ? user.serviceProvider.id : undefined,
-            staffProviderId: user.staff?.providerId ? user.staff.providerId : undefined
+            staffId: user.staff?.id ? user.staff?.id : undefined,
+            customerId: user.customerProfile?.id ? user.customerProfile.id : undefined
+
         })
 
         return {
@@ -210,7 +212,9 @@ export class AuthService {
                 userId: payload.userId,
                 deviceId: payload.deviceId,
                 roles: payload.roles,
-                providerId: payload.providerId
+                providerId: payload.providerId,
+                staffId: payload.staffId,
+                customerId: payload.customerId
             }),
             this.tokenService.signRefreshToken(payload),
         ])

@@ -15,7 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 
-@Controller('')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly googleService: GoogleService, private configService: ConfigService) { }
   //done

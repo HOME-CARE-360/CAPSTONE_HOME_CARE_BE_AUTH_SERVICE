@@ -96,7 +96,7 @@ export class AuthReponsitory {
             where: uniqueValue
         })
     }
-    async findUniqueUserIncludeRole(where: WhereUniqueUserType): Promise<(UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number } | null }) | null> {
+    async findUniqueUserIncludeRole(where: WhereUniqueUserType): Promise<(UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } | null }) | null> {
 
         const user = await this.prismaService.user.findFirst({
             where: {
@@ -112,12 +112,18 @@ export class AuthReponsitory {
                 },
                 staff: {
                     select: {
-                        providerId: true
+                        providerId: true,
+                        id: true
+                    }
+                }, customerProfile: {
+                    select: {
+                        id: true
                     }
                 }
             },
         })
-        return user as (UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number } }) | null
+
+        return user as (UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } }) | null
     }
     async findUniqueRefreshTokenIncludeUserRole(where: {
         token: string

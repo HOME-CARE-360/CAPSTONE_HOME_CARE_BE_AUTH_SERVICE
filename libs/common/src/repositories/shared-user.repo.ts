@@ -114,34 +114,53 @@ export class SharedUserRepository {
         })
         return userRaw
     }
-
     async createUserIncludeRole(
-        user: Pick<UserType, 'email' | 'name' | 'password' | 'phone' | 'avatar' | 'roles'>,
-    ): Promise<UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number } | null }> {
+        user: Pick<UserType, 'email' | 'name' | 'password' | 'phone' | 'avatar'> & { roles: Pick<RoleType, 'id' | 'name'>[] },
+    ): Promise<
+        UserType & {
+            roles: Pick<RoleType, 'id' | 'name'>[];
+            serviceProvider: { id: number } | null;
+            staff: { providerId: number; id: number } | null;
+            customerProfile: { id: number } | null;
+        }
+    > {
         return await this.prismaService.user.create({
             data: {
                 email: user.email,
                 name: user.name,
                 password: user.password,
                 phone: user.phone,
-                roles: {
-                    connect: user.roles.map(roleId => ({ id: roleId.id }))
-                },
                 avatar: user.avatar,
+                roles: {
+                    connect: user.roles.map((role) => ({ id: role.id, name: role.name })),
+                },
             },
             include: {
-                roles: true,
+                roles: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 serviceProvider: {
                     select: {
-                        id: true
-                    }
+                        id: true,
+                    },
                 },
                 staff: {
                     select: {
-                        providerId: true
-                    }
-                }
+                        providerId: true,
+                        id: true,
+                    },
+                },
+                customerProfile: {
+                    select: {
+                        id: true,
+                    },
+                },
             },
-        })
+        });
+
     }
-}   
+
+}
