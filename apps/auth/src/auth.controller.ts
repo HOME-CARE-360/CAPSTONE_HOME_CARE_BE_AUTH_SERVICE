@@ -34,7 +34,7 @@ export class AuthController {
   }
   @MessagePattern({ cmd: 'login' })
   @IsPublic()
-  login(body: LoginBodyDTO & { ip: string, userAgent: string }) {
+  login(@Payload() body: LoginBodyDTO & { ip: string, userAgent: string }) {
     return this.authService.login({
       ...body
     })

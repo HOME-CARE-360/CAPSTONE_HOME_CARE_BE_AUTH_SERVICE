@@ -156,6 +156,7 @@ export class AuthService {
     async login(body: LoginBodyType & { userAgent: string; ip: string }) {
         const user = await this.authRepository.findUniqueUserIncludeRole({ email: body.email })
         if (!user) throw EmailNotFoundException
+        console.log(user);
 
         const isPasswordMatch = await this.hashingService.compare(body.password, user.password)
         if (!isPasswordMatch) {
