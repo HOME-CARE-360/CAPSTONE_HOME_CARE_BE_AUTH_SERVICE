@@ -208,6 +208,8 @@ export class AuthService {
     }
 
     async generateTokens(payload: AccessTokenPayloadCreate) {
+        console.log(payload);
+
         const [accessToken, refreshToken] = await Promise.all([
             this.tokenService.signAccessToken({
                 userId: payload.userId,
