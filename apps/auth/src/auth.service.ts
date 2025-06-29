@@ -239,6 +239,10 @@ export class AuthService {
         ip,
         userAgent,
     }: RefreshTokenBodyType & { userAgent: string; ip: string }) {
+        console.log(refreshToken,
+            ip,
+            userAgent,);
+
         try {
             const { userId } = await this.tokenService.verifyRefreshToken(refreshToken)
 
@@ -259,6 +263,8 @@ export class AuthService {
                 data: tokens,
             }
         } catch (error) {
+            console.log(error);
+
             if (error instanceof HttpException) throw new RpcException(error)
             throw UnauthorizedExceptionRpc
         }
