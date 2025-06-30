@@ -21,9 +21,10 @@ export class TokenService {
         })
     }
     signRefreshToken(payload: RefreshTokenPayloadCreate) {
+        console.log("sign refresh");
         console.log(this.configService.get("REFRESH_TOKEN_SECRET"));
         return this.jwtService.sign({ ...payload, uuid: uuid() }, {
-            secret: this.configService.get(""),
+            secret: this.configService.get("REFRESH_TOKEN_SECRET"),
             expiresIn: this.configService.get("REFRESH_TOKEN_EXPIRES_IN"),
             algorithm: "HS256"
 
