@@ -8,6 +8,8 @@ import { ConfigService } from '@nestjs/config';
 export class TokenService {
     constructor(private readonly jwtService: JwtService, private configService: ConfigService) { }
     signAccessToken(payload: AccessTokenPayloadCreate) {
+        console.log("access");
+
         console.log(this.configService.get("ACCESS_TOKEN_SECRET"));
         return this.jwtService.sign({ ...payload, uuid: uuid() }, {
 
@@ -28,6 +30,7 @@ export class TokenService {
         })
     }
     verifyRefreshToken(token: string): Promise<RefreshTokenPayload> {
+        console.log("refresh");
         console.log(this.configService.get("REFRESH_TOKEN_SECRET"));
         return this.jwtService.verifyAsync(token, {
             secret: this.configService.get("REFRESH_TOKEN_SECRET"),
