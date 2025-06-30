@@ -8,7 +8,10 @@ import { ConfigService } from '@nestjs/config';
 export class TokenService {
     constructor(private readonly jwtService: JwtService, private configService: ConfigService) { }
     signAccessToken(payload: AccessTokenPayloadCreate) {
+        console.log(this.configService.get("ACCESS_TOKEN_SECRET"));
         return this.jwtService.sign({ ...payload, uuid: uuid() }, {
+
+
             secret: this.configService.get("ACCESS_TOKEN_SECRET"),
             expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRES_IN"),
             algorithm: "HS256"
@@ -16,14 +19,16 @@ export class TokenService {
         })
     }
     signRefreshToken(payload: RefreshTokenPayloadCreate) {
+        console.log(this.configService.get("REFRESH_TOKEN_SECRET"));
         return this.jwtService.sign({ ...payload, uuid: uuid() }, {
-            secret: this.configService.get("REFRESH_TOKEN_SECRET"),
+            secret: this.configService.get(""),
             expiresIn: this.configService.get("REFRESH_TOKEN_EXPIRES_IN"),
             algorithm: "HS256"
 
         })
     }
     verifyRefreshToken(token: string): Promise<RefreshTokenPayload> {
+        console.log(this.configService.get("REFRESH_TOKEN_SECRET"));
         return this.jwtService.verifyAsync(token, {
             secret: this.configService.get("REFRESH_TOKEN_SECRET"),
 
