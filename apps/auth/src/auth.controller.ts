@@ -3,7 +3,7 @@ import { Body, Controller, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { ZodSerializerDto } from 'nestjs-zod';
-import { GetAuthorizationUrlResDTO, LoginBodyDTO, RegisterBodyDTO, RegisterResDTO, SendOTPBodyDTO, ForgotPasswordBodyDTO, LogoutBodyDTO, RefreshTokenBodyDTO, RefreshTokenResDTO, RegisterProviderBodyDto, } from 'libs/common/src/request-response-type/auth/auth.dto';
+import { GetAuthorizationUrlResDTO, LoginBodyDTO, RegisterResDTO, RefreshTokenResDTO, } from 'libs/common/src/request-response-type/auth/auth.dto';
 
 import { GoogleService } from './google.service';
 
@@ -13,6 +13,7 @@ import { IsPublic } from 'libs/common/src/decorator/auth.decorator';
 import { MessageResDTO } from 'libs/common/src/dtos/response.dto';
 import { ConfigService } from '@nestjs/config';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ForgotPasswordBodyType, LogoutBodyType, RefreshTokenBodyType, RegisterBodyType, RegisterProviderBodyType, SendOTPBodyType } from 'libs/common/src/request-response-type/auth/auth.model';
 
 
 @Controller('auth')
@@ -22,14 +23,14 @@ export class AuthController {
   @MessagePattern({ cmd: 'register' })
   @IsPublic()
   @ZodSerializerDto(RegisterResDTO)
-  async register(@Payload() body: RegisterBodyDTO) {
+  async register(@Payload() body: RegisterBodyType) {
     return await this.authService.register(body)
 
   }
   //done
   @MessagePattern({ cmd: 'otp' })
   @IsPublic()
-  async sendOTP(@Payload() body: SendOTPBodyDTO) {
+  async sendOTP(@Payload() body: SendOTPBodyType) {
     return await this.authService.sendOTP(body)
   }
   @MessagePattern({ cmd: 'login' })
@@ -46,7 +47,7 @@ export class AuthController {
   @IsPublic()
   @HttpCode(HttpStatus.OK)
   @ZodSerializerDto(RefreshTokenResDTO)
-  refreshToken(@Payload() { ip, userAgent, refreshToken }: RefreshTokenBodyDTO & {
+  refreshToken(@Payload() { ip, userAgent, refreshToken }: RefreshTokenBodyType & {
     ip: string, userAgent: string
   }
   ) {
@@ -61,7 +62,7 @@ export class AuthController {
   //done
   @MessagePattern({ cmd: 'logout' })
   @ZodSerializerDto(MessageResDTO)
-  logout(@Payload() body: LogoutBodyDTO) {
+  logout(@Payload() body: LogoutBodyType) {
     console.log(body);
     return this.authService.logout(body.refreshToken)
   }
@@ -69,7 +70,7 @@ export class AuthController {
   @MessagePattern({ cmd: 'forgot-password' })
   @IsPublic()
   @ZodSerializerDto(MessageResDTO)
-  forgotPassword(@Body() body: ForgotPasswordBodyDTO) {
+  forgotPassword(@Body() body: ForgotPasswordBodyType) {
     return this.authService.forgotPassword(body)
   }
   //done
@@ -96,7 +97,7 @@ export class AuthController {
   @MessagePattern({ cmd: 'register-provider' })
   @IsPublic()
   @ZodSerializerDto(MessageResDTO)
-  async registerProvider(@Payload() body: RegisterProviderBodyDto) {
+  async registerProvider(@Payload() body: RegisterProviderBodyType) {
     return await this.authService.registerProvider(body)
   }
 
