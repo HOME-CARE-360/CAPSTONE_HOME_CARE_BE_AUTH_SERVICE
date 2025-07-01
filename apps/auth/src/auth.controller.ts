@@ -98,6 +98,8 @@ export class AuthController {
   @IsPublic()
   @ZodSerializerDto(MessageResDTO)
   async registerProvider(@Payload() body: RegisterProviderBodyType) {
+    console.log("vo r");
+
     return await this.authService.registerProvider(body)
   }
 
