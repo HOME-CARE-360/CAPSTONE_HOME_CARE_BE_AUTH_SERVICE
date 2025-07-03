@@ -1,4 +1,4 @@
-import { NotFoundException } from "@nestjs/common";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
 
 export const ServiceProviderNotFoundException = new RpcException(
@@ -6,3 +6,8 @@ export const ServiceProviderNotFoundException = new RpcException(
         { message: 'Error.ServiceProviderNotFound', path: ['id'] },
     ])
 );
+
+export const ProviderNotVerifiedException = new RpcException(new ForbiddenException({
+    message: 'Error.ProviderNotVerified',
+    path: ['providerId'],
+}));

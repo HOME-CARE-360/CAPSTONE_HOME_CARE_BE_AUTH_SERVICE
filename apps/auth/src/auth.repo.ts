@@ -7,6 +7,7 @@ import { RoleType } from "libs/common/src/models/shared-role.model";
 import { TypeOfVerificationCodeType } from "libs/common/src/constants/auth.constant";
 import { WhereUniqueUserType } from "libs/common/src/repositories/shared-user.repo";
 import { CreateServiceProviderType } from "libs/common/src/models/shared-provider.model";
+import { VerificationStatus } from "@prisma/client";
 
 
 
@@ -96,7 +97,7 @@ export class AuthReponsitory {
             where: uniqueValue
         })
     }
-    async findUniqueUserIncludeRole(where: WhereUniqueUserType): Promise<(UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } | null }) | null> {
+    async findUniqueUserIncludeRole(where: WhereUniqueUserType): Promise<(UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number, verificationStatus: VerificationStatus } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } | null }) | null> {
 
         const user = await this.prismaService.user.findFirst({
             where: {
@@ -107,7 +108,8 @@ export class AuthReponsitory {
                 roles: true,
                 serviceProvider: {
                     select: {
-                        id: true
+                        id: true,
+                        verificationStatus: true
                     }
                 },
                 staff: {
@@ -123,7 +125,7 @@ export class AuthReponsitory {
             },
         })
 
-        return user as (UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } }) | null
+        return user as (UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number, verificationStatus: VerificationStatus } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } }) | null
     }
     async findUniqueRefreshTokenIncludeUserRole(where: {
         token: string

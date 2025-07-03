@@ -50,6 +50,7 @@ import { generateOTP, isNotFoundPrismaError, isUniqueConstraintPrismaError } fro
 import { ConfigService } from '@nestjs/config'
 import { EmailAlreadyExistsException, EmailNotFoundException } from 'libs/common/src/errors/share-user.error'
 import { RpcException } from '@nestjs/microservices'
+import { ProviderNotVerifiedException } from 'libs/common/src/errors/share-provider.error'
 
 @Injectable()
 export class AuthService {
@@ -156,14 +157,16 @@ export class AuthService {
     async login(body: LoginBodyType & { userAgent: string; ip: string }) {
         const user = await this.authRepository.findUniqueUserIncludeRole({ email: body.email })
         if (!user) throw EmailNotFoundException
-        console.log(user);
+
 
         const isPasswordMatch = await this.hashingService.compare(body.password, user.password)
         if (!isPasswordMatch) {
             throw InvalidPasswordException
 
         }
-
+        if (user.serviceProvider?.verificationStatus !== VerificationStatusConst.VERIFIED) {
+            throw ProviderNotVerifiedException
+        }
         if (user.totpSecret) {
             if (!body.totpCode && !body.code) throw InvalidTOTPAndCodeException
 
