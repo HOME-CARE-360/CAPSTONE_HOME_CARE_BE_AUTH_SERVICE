@@ -100,14 +100,14 @@ export class GoogleService {
         })
       }
       const device = await this.authRepository.createDevice({
-        userId: user.id,
+        userId: user!.id,
         userAgent,
         ip,
       })
       const authTokens = await this.authService.generateTokens({
-        userId: user.id,
+        userId: user!.id,
         deviceId: device.id,
-        roles: user.roles.map((item) => ({ id: item.id, name: item.name })),
+        roles: user!.roles.map((item) => ({ id: item.id, name: item.name })),
       })
       return authTokens
     } catch (error) {

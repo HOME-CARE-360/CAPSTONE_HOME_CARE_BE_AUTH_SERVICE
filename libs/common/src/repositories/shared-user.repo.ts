@@ -3,6 +3,7 @@ import { PrismaService } from "../services/prisma.service";
 import { UserType } from "../models/shared-user.model";
 import { RoleType } from "../models/shared-role.model";
 import { PermissionType } from "../models/shared-permission.model";
+import { VerificationStatus } from "@prisma/client";
 type NewUser = Omit<UserType, "roles" | "password" | "totpSecret">
 type UserIncludeRolePermissionsType = NewUser & {
     roles: Array<
@@ -116,14 +117,7 @@ export class SharedUserRepository {
     }
     async createUserIncludeRole(
         user: Pick<UserType, 'email' | 'name' | 'password' | 'phone' | 'avatar'> & { roles: Pick<RoleType, 'id' | 'name'>[] },
-    ): Promise<
-        UserType & {
-            roles: Pick<RoleType, 'id' | 'name'>[];
-            serviceProvider: { id: number } | null;
-            staff: { providerId: number; id: number } | null;
-            customerProfile: { id: number } | null;
-        }
-    > {
+    ): Promise<(UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number, verificationStatus: VerificationStatus } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } | null }) | null> {
         return await this.prismaService.user.create({
             data: {
                 email: user.email,
@@ -145,6 +139,7 @@ export class SharedUserRepository {
                 serviceProvider: {
                     select: {
                         id: true,
+                        verificationStatus: true
                     },
                 },
                 staff: {
