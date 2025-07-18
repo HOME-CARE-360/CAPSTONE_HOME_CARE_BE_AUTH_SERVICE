@@ -31,7 +31,6 @@ const sharedServices = [
   SharedCategoryRepository,
   SharedUserRepository
 ]
-
 @Global()
 @Module({
   providers: [
