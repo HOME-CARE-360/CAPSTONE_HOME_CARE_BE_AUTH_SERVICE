@@ -143,6 +143,7 @@ export class AuthService {
             email: body.email,
             type: body.type,
             code,
+
             expiresAt: addMilliseconds(new Date(), ms(this.configService.get("OTP_EXPIRES_IN"))),
         })
 
