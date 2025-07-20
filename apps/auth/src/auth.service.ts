@@ -165,7 +165,9 @@ export class AuthService {
             throw InvalidPasswordException
 
         }
-        if (user.serviceProvider?.verificationStatus !== VerificationStatusConst.VERIFIED) {
+        console.log(user);
+
+        if (user.serviceProvider && user.serviceProvider.verificationStatus !== VerificationStatusConst.VERIFIED) {
             throw ProviderNotVerifiedException
         }
         if (user.totpSecret) {
