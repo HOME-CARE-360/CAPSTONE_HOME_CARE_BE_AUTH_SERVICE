@@ -97,7 +97,7 @@ export class SharedUserRepository {
                 phone: user.phone,
                 roles: {
                     connect: user.roles.map(roleId => ({ id: roleId.id }))
-                }
+                },
             },
             omit: {
                 password: true,
@@ -108,11 +108,16 @@ export class SharedUserRepository {
 
             }
         })
-        await this.prismaService.customerProfile.create({
+        await Promise.all([this.prismaService.wallet.create({
+            data: {
+                updatedAt: new Date(),
+                userId: userRaw.id,
+            }
+        }), this.prismaService.customerProfile.create({
             data: {
                 userId: userRaw.id
             }
-        })
+        })])
         return userRaw
     }
     async createUserIncludeRole(

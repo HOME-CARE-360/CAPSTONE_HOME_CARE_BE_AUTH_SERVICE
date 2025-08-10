@@ -12,6 +12,7 @@ import { VerificationStatus } from "@prisma/client";
 
 
 
+
 @Injectable()
 export class AuthReponsitory {
     constructor(private readonly prismaService: PrismaService) { }
@@ -163,9 +164,16 @@ export class AuthReponsitory {
         return false
     }
     async createServiceProvider(body: CreateServiceProviderType) {
-        await this.prismaService.serviceProvider.create({
-            data: { ...body }
-        })
+        await Promise.all([this.prismaService.serviceProvider.create({
+            data: { ...body },
+
+        }),
+        this.prismaService.wallet.create({
+            data: {
+                updatedAt: new Date(),
+                userId: body.userId,
+            }
+        })])
 
     }
 
