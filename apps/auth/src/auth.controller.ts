@@ -1,5 +1,5 @@
 
-import { Body, Controller, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { ZodSerializerDto } from 'nestjs-zod';
@@ -45,12 +45,15 @@ export class AuthController {
 
   @MessagePattern({ cmd: 'refresh-token' })
   @IsPublic()
+  @Post("refresh-token")
   @HttpCode(HttpStatus.OK)
   @ZodSerializerDto(RefreshTokenResDTO)
   refreshToken(@Payload() { ip, userAgent, refreshToken }: RefreshTokenBodyType & {
     ip: string, userAgent: string
   }
   ) {
+
+
     console.log(ip, userAgent, refreshToken);
 
     return this.authService.refreshToken({

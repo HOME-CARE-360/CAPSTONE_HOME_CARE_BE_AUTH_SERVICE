@@ -16,6 +16,14 @@ export interface AccessTokenPayload extends AccessTokenPayloadCreate {
 }
 export interface RefreshTokenPayloadCreate {
     userId: number,
+    deviceId: number,
+    providerId?: number,
+    customerId?: number,
+    staffId?: number,
+    roles: {
+        id: number,
+        name: string
+    }[]
 
 }
 export interface RefreshTokenPayload extends RefreshTokenPayloadCreate {

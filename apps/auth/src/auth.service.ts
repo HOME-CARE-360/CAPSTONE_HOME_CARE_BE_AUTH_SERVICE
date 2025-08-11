@@ -250,7 +250,8 @@ export class AuthService {
             userAgent,);
 
         try {
-            const { userId } = await this.tokenService.verifyRefreshToken(refreshToken)
+            const { userId, ...rest } = await this.tokenService.verifyRefreshToken(refreshToken)
+            console.log(rest);
 
             const refreshTokenInDb =
                 await this.authRepository.findUniqueRefreshTokenIncludeUserRole({ token: refreshToken })
@@ -260,7 +261,14 @@ export class AuthService {
 
             const $updateDevice = this.authRepository.updateDevice(deviceId, { ip, userAgent })
             const $deleteRefreshToken = this.authRepository.deleteRefreshToken({ token: refreshToken })
-            const $tokens = this.generateTokens({ userId, roles, deviceId })
+
+            const $tokens = this.generateTokens({
+                userId, roles, deviceId,
+                providerId: rest.providerId,
+                staffId: rest.staffId,
+                customerId: rest.customerId
+            })
+
 
             const [, , tokens] = await Promise.all([$updateDevice, $deleteRefreshToken, $tokens])
 
