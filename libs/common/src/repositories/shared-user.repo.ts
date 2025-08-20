@@ -108,16 +108,7 @@ export class SharedUserRepository {
 
             }
         })
-        await Promise.all([this.prismaService.wallet.create({
-            data: {
-                updatedAt: new Date(),
-                userId: userRaw.id,
-            }
-        }), this.prismaService.customerProfile.create({
-            data: {
-                userId: userRaw.id
-            }
-        })])
+
         return userRaw
     }
     async createUserIncludeRole(

@@ -115,7 +115,7 @@ export class AuthService {
                     },
                 }),
             ])
-
+            await this.authRepository.createCustomerProfile(user.id)
             return {
                 message: 'Register successfully',
                 data: user,

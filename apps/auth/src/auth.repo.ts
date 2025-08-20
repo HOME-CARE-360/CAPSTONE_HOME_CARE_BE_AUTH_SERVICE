@@ -164,7 +164,7 @@ export class AuthReponsitory {
         return false
     }
     async createServiceProvider(body: CreateServiceProviderType) {
-        await Promise.all([this.prismaService.serviceProvider.create({
+        return await Promise.all([this.prismaService.serviceProvider.create({
             data: { ...body },
 
         }),
@@ -175,6 +175,18 @@ export class AuthReponsitory {
             }
         })])
 
+    }
+    async createCustomerProfile(userId: number) {
+        return await Promise.all([this.prismaService.wallet.create({
+            data: {
+                updatedAt: new Date(),
+                userId: userId,
+            }
+        }), this.prismaService.customerProfile.create({
+            data: {
+                userId: userId
+            }
+        })])
     }
 
 }
