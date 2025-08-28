@@ -125,6 +125,7 @@ export class AuthReponsitory {
                 }
             },
         })
+        console.log(user);
 
         return user as (UserType & { roles: Pick<RoleType, "id" | "name">[] } & { serviceProvider: { id: number, verificationStatus: VerificationStatus } | null } & { staff: { providerId: number, id: number } | null } & { customerProfile: { id: number } }) | null
     }

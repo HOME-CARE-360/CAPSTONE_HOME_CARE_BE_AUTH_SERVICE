@@ -1,19 +1,23 @@
 import { UnprocessableEntityException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
 
-export const UserNotFoundException = new RpcException(new UnprocessableEntityException([
-    {
-        message: 'Error.UserNotFound',
-        path: 'code',
-    },
-]))
+export const UserNotFoundException = new RpcException(
+    new UnprocessableEntityException([
+        {
+            message: 'User not found',
+            path: 'code',
+        },
+    ]),
+);
+
 export const EmailAlreadyExistsException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.EmailAlreadyExists', path: 'email' },
-    ])
+        { message: 'Email already exists', path: 'email' },
+    ]),
 );
+
 export const EmailNotFoundException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.EmailNotFound', path: 'email' },
-    ])
+        { message: 'Email not found', path: 'email' },
+    ]),
 );

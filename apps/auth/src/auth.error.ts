@@ -3,78 +3,74 @@ import { RpcException } from '@nestjs/microservices';
 
 export const InvalidOTPException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.InvalidOTP', path: 'code' },
-    ])
+        { message: 'Invalid OTP code', path: 'code' },
+    ]),
 );
 
 export const OTPExpiredException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.OTPExpired', path: 'code' },
-    ])
+        { message: 'OTP code has expired', path: 'code' },
+    ]),
 );
 
 export const FailedToSendOTPException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.FailedToSendOTP', path: 'code' },
-    ])
+        { message: 'Failed to send OTP code', path: 'code' },
+    ]),
 );
 
 export const RefreshTokenRevokedException = new RpcException(
     new UnauthorizedException({
-        message: 'Error.RefreshTokenRevoked',
+        message: 'Refresh token has been revoked',
         path: 'refreshToken',
-    })
+    }),
 );
-
 
 export const ServiceProviderAlreadyExistsException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.ServiceProviderAlreadyExists', path: ['taxId', 'name'] },
-    ])
+        { message: 'Service provider with this Tax ID or Name already exists', path: ['taxId', 'name'] },
+    ]),
 );
 
 export const InvalidPasswordException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.InvalidPassword', path: 'password' },
-    ])
+        { message: 'Invalid password', path: 'password' },
+    ]),
 );
-
 
 export const RefreshTokenAlreadyUsedException = new RpcException(
-    new UnauthorizedException('Error.RefreshTokenAlreadyUsed')
+    new UnauthorizedException('Refresh token has already been used'),
 );
 
-
-
 export const GoogleUserInfoError = new RpcException(
-    new Error('Error.FailedToGetGoogleUserInfo')
+    new Error('Failed to get user info from Google'),
 );
 
 export const InvalidTOTPException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.InvalidTOTP', path: 'totpCode' },
-    ])
+        { message: 'Invalid TOTP code', path: 'totpCode' },
+    ]),
 );
 
 export const TOTPAlreadyEnabledException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.TOTPAlreadyEnabled', path: 'totpCode' },
-    ])
+        { message: 'TOTP is already enabled for this account', path: 'totpCode' },
+    ]),
 );
 
 export const TOTPNotEnabledException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.TOTPNotEnabled', path: 'totpCode' },
-    ])
+        { message: 'TOTP is not enabled for this account', path: 'totpCode' },
+    ]),
 );
 
 export const InvalidTOTPAndCodeException = new RpcException(
     new UnprocessableEntityException([
-        { message: 'Error.InvalidTOTPAndCode', path: 'totpCode' },
-        { message: 'Error.InvalidTOTPAndCode', path: 'code' },
-    ])
-);
-export const UnauthorizedExceptionRpc = new RpcException(
-    new UnauthorizedException()
+        { message: 'Invalid TOTP code', path: 'totpCode' },
+        { message: 'Invalid OTP code', path: 'code' },
+    ]),
 );
 
+export const UnauthorizedExceptionRpc = new RpcException(
+    new UnauthorizedException('Unauthorized access'),
+);
